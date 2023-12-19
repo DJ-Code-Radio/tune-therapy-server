@@ -6,6 +6,8 @@ const app = express();
 const port = 3000;
 const { generateImage, getTrack } = require('./controllers/openaiController')
 app.use(cors());
+
+//API calls for openai
 app.post('/openai/image', generateImage)
 app.get('/openai/track', getTrack)
 

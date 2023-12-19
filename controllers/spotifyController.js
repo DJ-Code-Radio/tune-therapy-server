@@ -10,23 +10,6 @@ async function searchSong(track) {
     const endpoint = `https://api.spotify.com/v1/search?${emotionChoice}&${genreChoice}`; 
 }
 
-
-
-// async function getSong(spotifyId) {
-//     const endpoint = `https://api.spotify.com/v1/tracks/${spotifyId}`;
-//     const headers = {
-//         Authorization: `Bearer ${SPOTIFY_API}`,
-//         'Content-Type': 'application/json',
-//       };
-//       try {
-//         const response = await axios.get(endpoint, {headers})
-//         return response.data; 
-//     } catch (error) {
-//       console.error('Error getting track:', error);
-//     }
-      
-// }
-
 async function createPlaylist(userId, token, playlistName) {
     const endpoint = `https://api.spotify.com/v1/users/${userId}/playlists`;
     const headers = {
