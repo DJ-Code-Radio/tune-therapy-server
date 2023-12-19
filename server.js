@@ -4,26 +4,12 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const port = 3000;
-const { generateImage } = require('./controllers/openaiController')
+const { generateImage, getTrack } = require('./controllers/openaiController')
 app.use(cors());
 app.post('/openai/image', generateImage)
+app.get('/openai/track', getTrack)
 
 
-
-//open ai api test for proof of life
-// app.get('/openai', async (req, res) => {
-//   try {
-//     const completion = await openai.chat.completions.create({
-//       messages: [{ role: 'system', content: 'You are a helpful assistant.' }],
-//       model: 'gpt-3.5-turbo',
-//     });
-
-//     res.json(completion.choices[0]);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 const getHomePage = (req, res) => {
   response.status(200).send('Welcome!')
 }

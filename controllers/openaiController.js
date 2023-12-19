@@ -62,7 +62,21 @@ const generateImage7 = async () => {
   console.log(image.data);
 };
 
-generateImage()
+generateImage();
+
+//-------------- need onClick data back from front end
+
+const getTrack = async () => {
+    const track = await openai.chat.completions.create({
+        messages: [
+            {role: "system", content: `Recommend a song based on the emotion happiness`}, 
+        ],
+        model: "gpt-3.5-turbo", 
+    });
+    console.log(track.data)
+}
+
+getTrack();
 
 
-module.exports = {generateImage};
+module.exports = {generateImage, getTrack};
