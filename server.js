@@ -9,7 +9,7 @@ app.use(cors());
 
 //API calls for openai
 app.post('/openai/image', generateImage)
-app.get('/openai/track', getTrack)
+// app.get('/openai/track', getTrack)
 
 
 const getHomePage = (req, res) => {
