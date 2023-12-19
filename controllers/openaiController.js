@@ -3,7 +3,7 @@ const { User } = require('@auth0/auth0-react');
 const OpenAIAPI = require('openai');
 const { response } = require('../server');
 require('dotenv').config();
-const axios = require('axios')
+const axios = require('axios');
 const qs = require('qs');
 
 const spotifyKey = process.env.SPOTIFY_API_KEY
@@ -106,35 +106,35 @@ const generateImage7 = async () => {
 
 //-------------- need onClick data back from front end
 
-const getTrack = async () => {
+// const getTrack = async () => {
 
-    const track = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [{
-            role: "user",
-            content: "Recommend me a song based on these genres: pop, and the emotion: happiness. I only want the name of the track and artist."
-        }]
-    })
-    const songRecommendation = track.choices[0].message.content
-    console.log('Song Recommendation', songRecommendation);
-    const [trackName, artist] = songRecommendation.split(' by ')
-    const token = spotifyKey
+//     const track = await openai.chat.completions.create({
+//         model: "gpt-3.5-turbo",
+//         messages: [{
+//             role: "user",
+//             content: "Recommend me a song based on these genres: pop, and the emotion: happiness. I only want the name of the track and artist."
+//         }]
+//     })
+//     const songRecommendation = track.choices[0].message.content
+//     console.log('Song Recommendation', songRecommendation);
+//     const [trackName, artist] = songRecommendation.split(' by ')
+//     const token = spotifyKey
 
-    const response = await axios.get(`https://api.spotify.com/v1/search`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
-        params: {
-            q: `${trackName} artist:${artist}`,
-            type: 'track'
-        }
-    });
+//     const response = await axios.get(`https://api.spotify.com/v1/search`, {
+//         headers: {
+//             'Authorization': `Bearer ${token}`
+//         },
+//         params: {
+//             q: `${trackName} artist:${artist}`,
+//             type: 'track'
+//         }
+//     });
 
-    const spotifyTracks = response.data.tracks.items;
-    // console.log("Spotify Search Results:", spotifyTracks);
+//     const spotifyTracks = response.data.tracks.items;
+//     // console.log("Spotify Search Results:", spotifyTracks);
 
-    return spotifyTracks;
-}
+//     return spotifyTracks;
+// }
 
 
 
