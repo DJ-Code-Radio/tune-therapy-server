@@ -1,4 +1,3 @@
-
 const { User } = require('@auth0/auth0-react');
 const OpenAIAPI = require('openai');
 const { response } = require('../server');
@@ -6,7 +5,7 @@ require('dotenv').config();
 const axios = require('axios');
 const qs = require('qs');
 
-const spotifyKey = process.env.SPOTIFY_API_KEY
+// const spotifyKey = process.env.SPOTIFY_API_KEY
 
 const openai = new OpenAIAPI({
     apiKey: process.env.OPENAI_API_KEY
@@ -14,7 +13,8 @@ const openai = new OpenAIAPI({
 
 const generateImage = async (req, res) => {
     try {
-      const { emotion } = req.body;
+      const  { emotion }  = req.body;
+      console.log(req.body);
       const imageResponse = await openai.images.generate({
         model: "dall-e-3",
         prompt: emotion,
