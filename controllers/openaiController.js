@@ -13,7 +13,7 @@ const openai = new OpenAIAPI({
 
 const generateImage = async (req, res) => {
     try {
-      const  { emotion }  = req.body;
+      const { emotion } = req.body;
       console.log(req.body);
       const imageResponse = await openai.images.generate({
         model: "dall-e-3",
