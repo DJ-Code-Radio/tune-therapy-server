@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 //API calls for openai
-// app.post('/openai/image', generateImage)
+app.post('/openai/image', generateImage)
 app.get('/openai/track', getTrack)
 
 
