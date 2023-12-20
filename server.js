@@ -6,6 +6,8 @@ const app = express();
 const port = 3000;
 const { generateImage, getTrack } = require('./controllers/openaiController')
 app.use(cors());
+// needs to be up here
+app.use(express.json());
 
 //API calls for openai
 app.post('/openai/image', generateImage)
@@ -17,7 +19,7 @@ const getHomePage = (req, res) => {
 }
 
 app.get('/', getHomePage);
-app.use(express.json());
+
 app.use('*', (req, res) => {
   res.status(404).send('These are not the droids you are looking for.');
 });
