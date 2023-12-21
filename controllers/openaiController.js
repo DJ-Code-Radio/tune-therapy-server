@@ -1,5 +1,4 @@
 const { User } = require("@auth0/auth0-react");
-const axios = require("axios");
 
 const OpenAIAPI = require("openai");
 const { google } = require("googleapis");
