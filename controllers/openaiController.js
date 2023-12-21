@@ -1,23 +1,27 @@
-const { User } = require('@auth0/auth0-react');
-const OpenAIAPI = require('openai');
-require('dotenv').config();
-const axios = require('axios');
+const { User } = require("@auth0/auth0-react");
+const axios = require("axios");
 
-const spotifyKey = process.env.SPOTIFY_API_KEY;
+const OpenAIAPI = require("openai");
+const { google } = require("googleapis");
+require("dotenv").config();
 
 const openai = new OpenAIAPI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Move emotion and genre extraction inside the function parameters
+const youtube = google.youtube({
+  version: "v3",
+  auth: process.env.YOUTUBE_API_KEY, // Replace with your YouTube API key
+});
+
 const generateImage = async (req, res) => {
   try {
-    const { emotion } = req.body; // Extract emotion from the request body
+    const { emotion } = req.body;
     console.log(req.body);
 
     const imageResponse = await openai.images.generate({
       model: "dall-e-3",
-      prompt: emotion,
+      prompt: `Give me a movie theater that captures this emotion: ${emotion}`,
       n: 1,
     });
 
@@ -29,35 +33,60 @@ const generateImage = async (req, res) => {
   }
 };
 
-// Move emotion and genre extraction inside the function parameters
-const getTrack = async (req, res) => {
-  console.log('hello');
+async function searchYouTube(query) {
   try {
-    const { genre, emotion } = req.body; // Extract emotion and genre from the request body
-    console.log(genre, emotion);
-    const track = await openai.chat.completions.create({
+    const response = await youtube.search.list({
+      part: "snippet",
+      q: query,
+      maxResults: 1,
+      type: "video",
+    });
+
+    if (response.data.items.length === 0) {
+      throw new Error("No results found");
+    }
+
+    const firstResult = response.data.items[0];
+    return {
+      videoId: firstResult.id.videoId,
+      title: firstResult.snippet.title,
+    };
+  } catch (error) {
+    console.error("Error searching YouTube:", error);
+    throw error;
+  }
+}
+
+const getMovie = async (req, res) => {
+  try {
+    const {genre, emotion} = req.body;
+    console.log("Request:", req);
+    console.log("Request body:", req.body);
+
+    const movie = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "user",
-          content: `Recommend a movie based on this genre: ${genre} and this emotion: ${emotion}. I only want the name of the track and artist.`,
+          content: `Recommend a movie based on this genre: ${genre} and this emotion: ${emotion}. Give me just the name of the movie and the year`,
         },
       ],
     });
 
-    console.log('OpenAI API Response:', track);
-    const songRecommendation = track.choices[0].message.content;
-    console.log('Song Recommendation:', songRecommendation);
-    
+    const movieRecommendation = movie.choices[0].message.content;
+    console.log("Movie Recommendation:", movieRecommendation);
 
-    // Further processing with Spotify API can be added here
-    // ...
+    // Search for the movie trailer on YouTube
+    const youtubeResponse = await searchYouTube(
+      movieRecommendation + " trailer"
+    );
+    const trailerUrl = `https://www.youtube.com/watch?v=${youtubeResponse.videoId}`;
 
-    res.json({ track });
+    res.json({ movie: movieRecommendation, trailerUrl });
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
-    res.status(500).send("error getting song recommendation");
+    console.error("Error:", error);
   }
 };
+// getMovie();
 
-module.exports = { generateImage, getTrack };
+module.exports = { generateImage, getMovie };

@@ -4,18 +4,18 @@ const express = require('express');
 const cors = require('cors')
 const app = express();
 const port = 3000;
-const { generateImage, getTrack } = require('./controllers/openaiController')
+const { generateImage, getMovie } = require('./controllers/openaiController')
 app.use(cors());
 // needs to be up here
 app.use(express.json());
 
 //API calls for openai
 app.post('/openai/image', generateImage)
-app.post('/openai/track', getTrack)
+app.post('/openai/movie', getMovie)
 
 
 const getHomePage = (req, res) => {
-  response.status(200).send('Welcome!')
+  res.status(200).send('Welcome!')
 }
 
 
