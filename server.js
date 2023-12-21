@@ -11,7 +11,7 @@ app.use(express.json());
 
 //API calls for openai
 app.post('/openai/image', generateImage)
-app.get('/openai/track', getTrack)
+app.post('/openai/track', getTrack)
 
 
 const getHomePage = (req, res) => {
