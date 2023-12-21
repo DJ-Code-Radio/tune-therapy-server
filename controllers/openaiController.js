@@ -44,12 +44,8 @@ async function searchYouTube(query) {
     if (response.data.items.length === 0) {
       throw new Error("No results found");
     }
-
-    const firstResult = response.data.items[0];
-    return {
-      videoId: firstResult.id.videoId,
-      title: firstResult.snippet.title,
-    };
+    return response.data.items[0];
+    // response.json({ movieTrailer })
   } catch (error) {
     console.error("Error searching YouTube:", error);
     throw error;
@@ -59,8 +55,6 @@ async function searchYouTube(query) {
 const getMovie = async (req, res) => {
   try {
     const {genre, emotion} = req.body;
-    console.log("Request:", req);
-    console.log("Request body:", req.body);
 
     const movie = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -73,14 +67,14 @@ const getMovie = async (req, res) => {
     });
 
     const movieRecommendation = movie.choices[0].message.content;
-    console.log("Movie Recommendation:", movieRecommendation);
 
     // Search for the movie trailer on YouTube
     const youtubeResponse = await searchYouTube(
       movieRecommendation + " trailer"
     );
-    const trailerUrl = `https://www.youtube.com/watch?v=${youtubeResponse.videoId}`;
 
+    const trailerUrl = `https://www.youtube.com/embed/${youtubeResponse.id.videoId}`;
+    
     res.json({ movie: movieRecommendation, trailerUrl });
   } catch (error) {
     console.error("Error:", error);
