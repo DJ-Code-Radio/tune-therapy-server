@@ -31,27 +31,29 @@ const generateImage = async (req, res) => {
 
 // Move emotion and genre extraction inside the function parameters
 const getTrack = async (req, res) => {
+  console.log('hello');
   try {
-    const { emotion, genre } = req.body; // Extract emotion and genre from the request body
-
+    const { genre, emotion } = req.body; // Extract emotion and genre from the request body
+    console.log(genre, emotion);
     const track = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "user",
-          content: `Recommend me a song based on these genres: ${genre} and the emotion: ${emotion}. I only want the name of the track and artist.`,
+          content: `Recommend a movie based on this genre: ${genre} and this emotion: ${emotion}. I only want the name of the track and artist.`,
         },
       ],
     });
 
+    console.log('OpenAI API Response:', track);
     const songRecommendation = track.choices[0].message.content;
     console.log('Song Recommendation:', songRecommendation);
-    console.log('OpenAI API Response:', track);
+    
 
     // Further processing with Spotify API can be added here
     // ...
 
-    res.json({ songRecommendation });
+    res.json({ track });
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     res.status(500).send("error getting song recommendation");
